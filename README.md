@@ -16,9 +16,11 @@
     - Model training, testing, and performance evaluation (Logistic Regression, Random Forest, Gradient Boosting) was done by Vineeth Movva.
     
 **F (Visualization, Result Analysis, Conclusion).**  
+    - Visualization was done by Dhruv Das
 **G (Final Tutorial Report Creation).**  
     - Alexander Cui wrote the Introduction and Data Curation portions of this assignment.  
     - Website is hosted and was formatted by Darek Yu.
+    - Dhruv Das did the second Data Exploration with the outliers in rankings and the Visualization.
 
 ## 2. Introduction
 Professional tennis is a highly dynamic sport where match outcomes are influenced by a multitude of complex variables. While the ATP (Association of Tennis Professionals) ranking system provides a reliable metric of long-term player consistency, upsets, a scenario where a statistically inferior player defeats a higher-ranked opponent, do occur. This project uses a dataset of over 60,000 ATP tennis matches to build a machine learning classification model that predicts the likelihood of these ranking-based upsets. By integrating ranking differences, playing surface, match round (within a tournament), betting odds, and match format, this analysis seeks to uncover the statistics behind upsets.
@@ -376,6 +378,30 @@ As a baseline, always predicting “no upset” achieved **Accuracy = 0.6541** b
 **Conclusion.** If the goal is to **detect upsets** (not just maximize accuracy), **Logistic Regression** provides the best balance of precision/recall and the strongest F1 score. If the goal is to make **fewer upset predictions with higher confidence**, **Gradient Boosting** is preferable due to its higher precision.
 
 ## 6. Visualizations
+
+```python
+import matplotlib.pyplot as plt
+import pandas as pd
+import seaborn as sns
+
+lr_model = models["Logistic Regression"].named_steps['clf']
+feature_names = X.columns
+
+importance = lr_model.coef_[0]
+
+feat_importance = pd.DataFrame({'Feature': feature_names, 'Importance': importance})
+feat_importance = feat_importance.sort_values(by='Importance', ascending=False)
+
+plt.figure(figsize=(10, 6))
+sns.barplot(x='Importance', y='Feature', data=feat_importance, hue='Feature', palette="vlag", legend=False)
+plt.axvline(x=0, color='black', lw=1)
+plt.title('Most Significant Factors for ATP Upsets (Logistic Regression Coefficients)', fontsize=14)
+plt.xlabel('Coefficient Magnitude (Directional Influence)')
+plt.ylabel('Match Variable')
+plt.grid(axis='x', linestyle='--', alpha=0.7)
+plt.show()
+```
+<img width="944" height="548" alt="feature_importance" src="https://github.com/user-attachments/assets/3dbdfbb1-934c-4882-a47f-8ef602f26f55" />
 
 ## 7. Conclusions
 
